@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background: url("{{ url_for('static', filename='bg.jpg') }}") no-repeat center center fixed;
+            background-size: cover;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0, 0, 0, 0.075) 25%, rgba(0, 0, 0, 0.445) 100%);
+            z-index: 0;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.90);
+            backdrop-filter: blur(20px);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            max-width: 420px;
+            width: 95%;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: fadeIn 1s ease-in-out; 
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .title {
+            font-family: 'Arial Black', sans-serif;
+            color: #dd4124;
+            font-size: 26px;
+            margin-bottom: 15px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .content {
+            font-size: 18px;
+            font-weight: normal;
+            color: #333;
+            line-height: 1.6;
+            text-align: justify;
+            max-width: 95%;
+        }
+
+        .btn-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .btn {
+            background: linear-gradient(to right, #dd4124, #bb2d1a);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover {
+            background: linear-gradient(to right, #bb2d1a, #a51e0f);
+            transform: scale(1.05);
+            box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 400px;
+            align-items: center;
+            margin-top: -16px;
+        }
+
+        input, textarea {
+            font-family: Arial, sans-serif; 
+            font-size: 16px;
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        textarea {
+            height: 100px;
+            resize: none;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Contact Us</h1>
+        <p class="content">If you have any questions or concerns, feel free to reach out to us using the form below.</p>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <p class="{{ category }}">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <form method="POST" action="{{ url_for('contact') }}">
+            <input type="text" name="name" placeholder="Name" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <textarea name="message" placeholder="Message" required></textarea>
+            <button type="submit" class="btn play-sound-btn">Submit</button>
+        </form>                
+        
+        <div class="btn-container">
+            <a href="{{ url_for('login') }}" class="btn play-sound-btn">Go Back</a>
+        </div>
+    </div>
+
+    <audio id="clickSound" src="{{ url_for('static', filename='click.mp3') }}"></audio>
+
+    <script>
+            document.querySelectorAll(".btn").forEach(button => {
+            button.addEventListener("click", function () {
+            let sound = document.getElementById("clickSound");
+            if (sound) {
+                sound.play();
+                }
+            });
+        });
+
+    </script>    
+        
+    
+</body>
+</html>

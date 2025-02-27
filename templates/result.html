@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Personalized Fitness Pick</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background: url("{{ url_for('static', filename='bg.jpg') }}") no-repeat center center fixed;
+            background-size: cover;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0, 0, 0, 0.075) 25%, rgba(0, 0, 0, 0.445) 100%);
+            z-index: 0;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.90);
+            backdrop-filter: blur(20px);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            width: 95%;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: fadeIn 1s ease-in-out; 
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .title {
+            font-family: 'Arial Black', sans-serif;
+            color: #dd4124;
+            font-size: 26px;
+            margin-top: -5px;
+            margin-bottom: 20px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .activity-image {
+            width: 40%;
+            max-width: 200px;
+            aspect-ratio: 3 / 4;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-right: 20px;
+            transition: transform 0.4s ease-in-out; 
+        }
+
+        .activity-image:hover {
+            transform: scale(1.06); 
+        }
+
+        .text-section {
+            flex-grow: 1;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            white-space: nowrap
+        }
+
+        p {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1f0101;
+            margin: 5px 0;
+        }
+
+        .motivation {
+            font-size: 18px;
+            font-style: italic;
+            font-family: 'Georgia', serif;
+            font-weight: bold;
+            letter-spacing: 0.3px;
+            line-height: 1.6;
+            color: #b12d16;
+            margin-top: 18px;
+            padding: 14px;
+            background: rgba(216, 52, 23, 0.103);
+            border-left: 5px solid #dd4124;
+            border-radius: 8px;
+            max-width: 90%;
+            text-align: center;
+            margin-left: 5px;
+        }
+
+        .btn-container {
+            margin-top: 20px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .btn {
+            background: linear-gradient(to right, #dd4124, #bb2d1a);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background: linear-gradient(to right, #bb2d1a, #a51e0f);
+            transform: scale(1.07);
+            box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:active {
+            transform: scale(0.96);
+        }
+        .logout-icon {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .logout-icon:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 500px) {
+            .container {
+                max-width: 92%;
+                padding: 25px;
+            }
+            .title {
+                font-size: 22px;
+            }
+            .content {
+                flex-direction: column;
+                align-items: center;
+            }
+            .activity-image {
+                width: 75%;
+                max-width: 250px;
+                margin-bottom: 10px;
+                margin-right: 0;
+            }
+            .text-section {
+                text-align: center;
+            }
+            .btn {
+                padding: 12px 24px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{{ url_for('logout') }}">
+            <img src="{{ url_for('static', filename='logout.png') }}" alt="Logout" class="logout-icon">
+        </a>
+        <h1 class="title">Your Personalized Fitness Pick</h1>
+
+        <div class="content">
+            <!-- Activity Image -->
+            <img src="{{ url_for('static', filename='images/' + activity.lower().replace(' ', '_') + '.jpg') }}" 
+                 alt="{{ activity }}" class="activity-image">
+
+            <!-- Activity Details & Motivation -->
+            <div class="text-section">
+                <p><strong>Recommended Activity:</strong> {{ activity }}</p>
+                <p><strong>Duration:</strong> {{ duration }} minutes</p>
+                <p><strong>Calories Burned:</strong> {{ calories }} cal</p>
+                <p class="motivation"><strong>{{ motivation_message | safe }}</strong></p>
+            </div>
+        </div>
+
+        <!-- Go Back & Logout Buttons -->
+        <div class="btn-container">
+            <a href="/" class="btn play-sound-btn">Go Back</a>
+        </div>
+
+    </div>
+
+        <audio id="clickSound" src="{{ url_for('static', filename='click.mp3') }}"></audio>
+
+    <script>
+        document.querySelectorAll(".play-sound-btn").forEach(button => {
+            button.addEventListener("click", function (event) {
+                event.preventDefault(); 
+                let sound = document.getElementById("clickSound");
+                sound.currentTime = 0; 
+                sound.play();               
+                setTimeout(() => {
+                    window.location.href = this.href;
+                }, 200); 
+            });
+        });
+    </script>
+
+</body>
+</html>

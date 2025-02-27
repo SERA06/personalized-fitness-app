@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Personalized Fitness</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: url("{{ url_for('static', filename='bg.jpg') }}") no-repeat center center fixed;
+            background-size: cover;
+            text-align: center;
+            position: relative;
+        }
+        
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0, 0, 0, 0.075) 25%, rgba(0, 0, 0, 0.342) 100%);
+            z-index: 0;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.90);
+            backdrop-filter: blur(20px);
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.466);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            z-index: 1; 
+        }
+        
+        .title {
+            font-family: 'Arial Black', sans-serif;
+            font-size: 28px;
+            color: #c51b05;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            margin-bottom: 15px;
+        }
+        
+        input {
+            width: 80%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        
+        .btn-container {
+            display: flex;
+            justify-content: center; 
+            align-items: center; 
+            gap: 20px; 
+            margin-top: 20px; 
+            width: 100%;
+        }
+        
+
+        .btn { 
+            background: linear-gradient(to right, #dd4124, #bb2d1a);
+            color: white;
+            border: none;
+            padding: 14px 28px; 
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            font-weight: bold;
+            text-align: center;
+            min-width: 120px; 
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background: linear-gradient(to right, #bb2d1a, #a51e0f);
+            transform: scale(1.05);
+            box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:active {
+            transform: scale(0.96);
+        }
+        
+        .links {
+            margin-top: 20px;
+            margin-bottom: -10px;
+        }
+        
+        .links a {
+            color: #bb2d1a;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Welcome Back!</h1>
+        
+        <form method="POST" action="{{ url_for('login') }}">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Password" required>
+            
+            <div class="btn-container">
+                <button type="submit" name="action" value="login" class="btn play-sound-btn">Login</button>
+                <button type="submit" name="action" value="register" class="btn play-sound-btn">Register</button>
+            </div>
+            
+        </form>
+
+        <div class="links">
+            <a href="{{ url_for('about') }}">About</a> | 
+            <a href="{{ url_for('contact') }}">Contact</a>
+        </div>
+    </div>
+            <!-- Click Sound Effect -->
+           <audio id="clickSound" src="{{ url_for('static', filename='click.mp3') }}"></audio>
+
+            <script>
+                document.querySelectorAll(".play-sound-btn").forEach(button => {
+                    button.addEventListener("click", function () {
+                        let sound = document.getElementById("clickSound");
+                        sound.currentTime = 0;
+                        sound.play();
+                    });
+                });
+            </script>
+
+</body>
+</html>

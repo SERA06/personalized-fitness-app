@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Fitness Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            margin: 0;
+            padding: 6px;
+            background: url("{{ url_for('static', filename='collage.jpg') }}") no-repeat center center fixed;
+            background-size: cover;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0, 0, 0, 0.212) 25%, rgba(0, 0, 0, 0.5) 100%);
+            z-index: 0;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.90);
+            backdrop-filter: blur(20px);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 450px;
+            width: 90%;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .title {
+            font-family: 'Arial Black', sans-serif;
+            color: #dd4124;
+            font-size: 22px;
+            margin-bottom: 16px;
+        }
+        
+        label {
+            font-family: 'Palatino', sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            display: block;
+            margin-top: 12px;
+            padding: 6px 6px;
+        }
+        
+        input, select {
+            font-family: 'Palatino', sans-serif;
+            font-size: 15px;
+            width: 76%;
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slider {
+            width: 66%;
+            color: #dd4124;
+        }
+
+        .slider-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #b12d16;
+            margin-left: 10px;
+        }
+
+        .btn {
+            background: linear-gradient(to right, #dd4124, #bb2d1a);
+            color: white;
+            border: none;
+            padding: 16px 16px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 16px;
+            margin-bottom: 16px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            font-weight: bold;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover {
+            background: linear-gradient(to right, #bb2d1a, #a51e0f);
+            transform: scale(1.08);
+            box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:active {
+            transform: scale(0.96);
+        }
+
+        @media (max-width: 500px) {
+            .container {
+                max-width: 90%;
+                padding: 18px;
+            }
+            .title {
+                font-size: 20px;
+            }
+            label {
+                font-size: 16px;
+            }
+            .btn {
+                padding: 14px 22px;
+                font-size: 15px;
+            }
+            .slider-container {
+                flex-direction: column;
+                gap: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Know Your Body, Own Your Fitness</h1>
+        <form action="/Set-Goal" method="GET" id="fitnessForm">
+            <label>BMI:</label>
+            <select name="BMI_category">
+                <option value="underweight">Underweight</option>
+                <option value="normal">Normal</option>
+                <option value="overweight">Overweight</option>
+                <option value="obese">Obese</option>
+            </select>
+    
+            <label>Weight (kg):</label>
+            <input type="number" name="weight_kg" required>
+    
+            <label>Height (cm):</label>
+            <input type="number" name="height_cm" required>
+    
+            <label>Health Condition:</label>
+            <select name="health_condition">
+                <option value="None">None</option>
+                <option value="Asthma">Asthma</option>
+                <option value="Diabetes">Diabetes</option>
+                <option value="Hypertension">Hypertension</option>
+            </select>
+    
+            <label>Fitness Level (0-20):</label>
+            <div class="slider-container">
+                <input type="range" name="fitness_level" class="slider" min="0" max="20" value="10" oninput="updateSliderValue(this.value)">
+                <span class="slider-value" id="sliderValue">10</span>
+            </div>
+    
+            <button type="submit" class="btn play-sound-btn">Keep Going ➔</button>
+        </form>
+    </div>
+    
+
+    <audio id="clickSound" src="{{ url_for('static', filename='click.mp3') }}"></audio>
+
+    <script>
+        function updateSliderValue(value) {
+            document.getElementById('sliderValue').textContent = value;
+        }
+
+        document.getElementById("fitnessForm").addEventListener("submit", function (event) {
+            event.preventDefault(); 
+            let sound = document.getElementById("clickSound");
+            sound.currentTime = 0; 
+            sound.play().then(() => {
+                setTimeout(() => { event.target.submit(); }, 300); 
+            }).catch(() => { event.target.submit(); }); 
+        });
+    </script>
+</body>
+</html>
